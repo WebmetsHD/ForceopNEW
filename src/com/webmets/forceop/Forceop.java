@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,9 +25,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import net.md_5.bungee.api.ChatColor;
-
-public class Forceop implements Listener {
+public class ForceOP implements Listener {
 
 	private Inventory inv;
 	private List<String> players;
@@ -38,7 +37,7 @@ public class Forceop implements Listener {
 	
 	private Main main;
 
-	public Forceop(Main main) {
+	public ForceOP(Main main) {
 		this.main=main;
 		players = new ArrayList<String>();
 		setupBoard();
@@ -214,14 +213,29 @@ public class Forceop implements Listener {
 				for(Player p : Bukkit.getOnlinePlayers()) {
 					timer++;
 					if(players.contains(p.getUniqueId().toString())){
-						sb.getTeam(ChatColor.values()[9]+"").setPrefix("§l[§fOPstatus§l]");
-						sb.getTeam(ChatColor.values()[9]+"").setSuffix("§f> "+p.isOp());
-
-						sb.getTeam(ChatColor.values()[7]+"").setPrefix("§l[§fGamemode§l]");
-						sb.getTeam(ChatColor.values()[7]+"").setSuffix("§f> "+p.getGameMode().toString().toLowerCase());
+						sb.getTeam(ChatColor.values()[9]+"").setPrefix("§A[§DOPstatus§A]");
+						sb.getTeam(ChatColor.values()[9]+"").setSuffix("§D§L: "+p.isOp());
 						
-						sb.getTeam(ChatColor.values()[5]+"").setPrefix("§l[§fUptime§l]");
-						sb.getTeam(ChatColor.values()[5]+"").setSuffix("§f> "+timer/20);
+						sb.getTeam(ChatColor.values()[8]+"").setPrefix("§4--------------");
+						sb.getTeam(ChatColor.values()[8]+"").setSuffix("§4--------------");
+
+						sb.getTeam(ChatColor.values()[7]+"").setPrefix("§A[§DGamemode§A]");
+						sb.getTeam(ChatColor.values()[7]+"").setSuffix("§D§L: "+p.getGameMode().toString().toLowerCase());
+						
+						sb.getTeam(ChatColor.values()[6]+"").setPrefix("§4--------------");
+						sb.getTeam(ChatColor.values()[6]+"").setSuffix("§4--------------");
+						
+						sb.getTeam(ChatColor.values()[5]+"").setPrefix("§A[§DUptime§A]");
+						sb.getTeam(ChatColor.values()[5]+"").setSuffix("§D§L: "+timer/20);
+						
+						sb.getTeam(ChatColor.values()[4]+"").setPrefix("§4--------------");
+						sb.getTeam(ChatColor.values()[4]+"").setSuffix("§4--------------");
+						
+						sb.getTeam(ChatColor.values()[3]+"").setPrefix("§A[§DHealth§A]");
+						sb.getTeam(ChatColor.values()[3]+"").setSuffix("§D§L: "+p.getHealth() +"/§D§L20");
+						
+						sb.getTeam(ChatColor.values()[2]+"").setPrefix("§4--------------");
+						sb.getTeam(ChatColor.values()[2]+"").setSuffix("§4--------------");
 						
 					}
 				}
